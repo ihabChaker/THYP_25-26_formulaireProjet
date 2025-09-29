@@ -4,15 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="style.css">
     <title>Projets hypermédias</title>
 </head>
 
 <body>
+    <h1 class="mt-5 mb-5 text-center">Vos projets de l'hypermédias</h1>
+    <div class="container d-flex flex-column align-items-center" id="cards-container">
+        <!-- Cards will be inserted here -->
+    </div>
     <script>
-        const LINK = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRb4xcfBrFZEbWhRNuBF_TrxiAJBTOkHl7cBDRkj6dokm-56Z_xnKE37mNtE0VOLsH2KWrBIr1Fvnt9/pub?gid=1997656113&single=true&output=csv"
-        fetch(LINK).then(response => response.text()).then(data => {
-            document.body.innerHTML = data;
-        });
+        const LINK = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRb4xcfBrFZEbWhRNuBF_TrxiAJBTOkHl7cBDRkj6dokm-56Z_xnKE37mNtE0VOLsH2KWrBIr1Fvnt9/pub?output=tsv";
+        fetch(LINK)
+            .then(response => response.text())
+            .then(data => {
+                const lines = data.trim().split("\n").slice(1); // skip header
+                const container = document.getElementById('cards-container');
+                lines.forEach(line => {
+                    const fields = line.split("\t");
+                    if (fields.length < 9) return; // skip incomplete lines
+                    // Remove timestamp
+                    const [, name, email, tel, title, desc, audience, formats, devices] = fields;
+                    const card = document.createElement('div');
+                    card.className = "card w-100 mb-4";
+                    card.innerHTML = `
+                        <div class="card-body p-4">
+                            <h2 class="card-title mb-2">${title}</h2>
+                            <p class="card-text mb-1"><strong>Nom et prénom:</strong> ${name}</p>
+                            <p class="card-text mb-1"><strong>Num de téléphone:</strong> ${tel}</p>
+                            <p class="card-text mb-1"><strong>Email:</strong> ${email}</p>
+                            <p class="card-text mb-1"><strong>Description:</strong> ${desc}</p>
+                            <p class="card-text mb-1"><strong>Audience:</strong> ${audience}</p>
+                            <p class="card-text mb-1"><strong>Formats:</strong> ${formats}</p>
+                            <p class="card-text"><strong>Devices:</strong> ${devices.replace('\r', '')}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
     </script>
 </body>
 
