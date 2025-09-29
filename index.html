@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projets hypermédias</title>
+</head>
+
+<body>
+    <script>
+        const LINK = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRb4xcfBrFZEbWhRNuBF_TrxiAJBTOkHl7cBDRkj6dokm-56Z_xnKE37mNtE0VOLsH2KWrBIr1Fvnt9/pub?gid=1997656113&single=true&output=csv"
+        fetch(LINK).then(response => response.text()).then(data => {
+            document.body.innerHTML = data;
+        });
+    </script>
+</body>
+
+</html>
